@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: aviacompany
+  flyway:
+    baseline-on-migrate: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/aviacompany
+    username: root
+    password: root
