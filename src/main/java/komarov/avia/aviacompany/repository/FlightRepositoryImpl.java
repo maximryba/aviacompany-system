@@ -6,7 +6,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.time.Period;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -23,12 +26,12 @@ public class FlightRepositoryImpl implements FlightRepository {
         flight.setAirplaneId(rs.getInt("airplane_id"));
         flight.setDepartureAirport(rs.getInt("departure_airport"));
         flight.setArrivalAirport(rs.getInt("arrival_airport"));
-        flight.setDepartureTime(rs.getTime("departure_time"));
-        flight.setArrivalTime(rs.getTime("arrival_time"));
+        flight.setDepartureTime(rs.getTime("departure_time").toLocalTime());
+        flight.setArrivalTime(rs.getTime("arrival_time").toLocalTime());
         flight.setCost(rs.getBigDecimal("cost"));
         flight.setDistance(rs.getInt("distance"));
         flight.setPassengerCount(rs.getInt("passenger_count"));
-        flight.setFlightDuration((Period) rs.getObject("flight_duration"));
+        flight.setFlightDuration((rs.getString("flight_duration")));
         return flight;
     };
 
@@ -46,14 +49,30 @@ public class FlightRepositoryImpl implements FlightRepository {
 
     @Override
     public int save(Flight flight) {
-        String sql = "INSERT INTO flights (airplane_id, departure_airport, arrival_airport, departure_time, arrival_time," +
-                " cost, distance, passenger_count, flight_duration)" +
-                " VALUES (airplane_id = ?, departure_airport = ?, arrival_airport = ?," +
-                "departure_time = ?, arrival_time = ?, cost = ?, distance = ?, passenger_count = ?," +
-                "flight_duration = ?)";
-        return jdbcTemplate.update(sql, flight.getAirplaneId(), flight.getDepartureAirport(), flight.getArrivalAirport(),
-                flight.getDepartureTime(), flight.getArrivalTime(), flight.getCost(), flight.getDistance(),
-                flight.getPassengerCount(), flight.getFlightDuration());
+        String sql = "INSERT INTO flights (airplane_id, departure_airport, arrival_airport, departure_time, arrival_time, " +
+                "cost, distance, passenger_count, flight_duration) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?::INTERVAL)";
+
+        String flightDurationInterval = calculateFlightDurationAsInterval(
+                flight.getDepartureTime(), flight.getArrivalTime());
+
+        // Преобразуем LocalTime в LocalDateTime
+        LocalDateTime departureDateTime = LocalDateTime.of(LocalDate.now(), flight.getDepartureTime());
+        LocalDateTime arrivalDateTime = LocalDateTime.of(LocalDate.now(), flight.getArrivalTime());
+
+        flight.setFlightDuration(flightDurationInterval);
+        System.out.println(flight);
+        return jdbcTemplate.update(sql,
+                flight.getAirplaneId(),
+                flight.getDepartureAirport(),
+                flight.getArrivalAirport(),
+                java.sql.Timestamp.valueOf(departureDateTime),  // Преобразование LocalTime в Time
+                java.sql.Timestamp.valueOf(arrivalDateTime),    // Преобразование LocalTime в Time
+                flight.getCost(),
+                flight.getDistance(),
+                flight.getPassengerCount(),
+                flightDurationInterval  // Использование рассчитанной продолжительности полета
+        );
     }
 
     @Override
@@ -66,10 +85,18 @@ public class FlightRepositoryImpl implements FlightRepository {
     public int update(int id, Flight flight) {
         String sql = "UPDATE flights set airplane_id = ?, departure_airport = ?, arrival_airport = ?," +
                 "departure_time = ?, arrival_time = ?, cost = ?, distance = ?, passenger_count = ?," +
-                "flight_duration = ? WHERE id = ?";
+                "flight_duration = ?::INTERVAL WHERE id = ?";
+
+        String flightDurationInterval = calculateFlightDurationAsInterval(
+                flight.getDepartureTime(), flight.getArrivalTime());
+
+        // Преобразуем LocalTime в LocalDateTime
+        LocalDateTime departureDateTime = LocalDateTime.of(LocalDate.now(), flight.getDepartureTime());
+        LocalDateTime arrivalDateTime = LocalDateTime.of(LocalDate.now(), flight.getArrivalTime());
+
         return jdbcTemplate.update(sql, flight.getAirplaneId(), flight.getDepartureAirport(), flight.getArrivalAirport(),
-                flight.getDepartureTime(), flight.getArrivalTime(), flight.getCost(), flight.getDistance(),
-                flight.getPassengerCount(), flight.getFlightDuration(), id);
+                java.sql.Timestamp.valueOf(departureDateTime), java.sql.Timestamp.valueOf(arrivalDateTime), flight.getCost(), flight.getDistance(),
+                flight.getPassengerCount(), flightDurationInterval, id);
     }
 
     @Override
@@ -80,6 +107,18 @@ public class FlightRepositoryImpl implements FlightRepository {
                 " WHERE dep.city = ? AND arr.city = ? AND arrival_time = ? AND " +
                 "passenger_count = ?";
         return jdbcTemplate.query(sql, flightRowMapper, departureCity, destinationCity, departureDate, passengerCount);
+    }
+
+    public static String calculateFlightDurationAsInterval(LocalTime departureTime, LocalTime arrivalTime) {
+        // Рассчитываем продолжительность между временем отправления и прибытия
+        Duration duration = Duration.between(departureTime, arrivalTime);
+
+        // Преобразуем продолжительность в минуты и часы
+        long hours = duration.toHours();
+        long minutes = duration.toMinutes() % 60;
+
+        // Формируем строку в формате SQL INTERVAL
+        return String.format("'%d hours %d minutes'", hours, minutes);
     }
 
 }

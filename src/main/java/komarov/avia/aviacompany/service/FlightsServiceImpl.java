@@ -60,6 +60,8 @@ public class FlightsServiceImpl implements FlightsService {
     @Override
     public int update(int id, Flight flight) {
         try {
+            System.out.println(id);
+            System.out.println(flight.getId());
             return this.flightRepository.update(id, flight);
         } catch (Exception e) {
             throw new NoSuchElementException();

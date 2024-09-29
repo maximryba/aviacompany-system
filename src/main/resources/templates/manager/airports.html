@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Управление аэропортами</title>
+  <link rel="stylesheet" th:href="@{/css/manager.css}">
+  <script th:src="@{/js/manager-airports.js}"></script>
+</head>
+<body>
+<header>
+  <h1>Страница менеджера: Управление аэропортами</h1>
+  <nav>
+    <ul>
+      <li><a th:href="@{/manager}">Главная</a></li>
+      <li><a th:href="@{/flights/all}">Рейсы</a></li>
+      <li><a th:href="@{/logout}">Выйти</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <section class="airport-section">
+    <h2>Список аэропортов</h2>
+
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Название</th>
+        <th>Город</th>
+        <th>Страна</th>
+        <th>Перевозка грузов</th>
+        <th>Действия</th>
+        <th>Действия</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="airport : ${airports}">
+        <form th:action="@{/manager/airports/edit/{id}(id=${airport.id})}" method="post">
+          <td th:text="${airport.id}"></td>
+          <td><input type="text" name="name" th:value="${airport.name}" required disabled/></td>
+          <td><input type="text" name="city" th:value="${airport.city}" required disabled/></td>
+          <td><input type="text" name="country" th:value="${airport.country}" required disabled/></td>
+          <td><input type="checkbox" name="goodsService" th:checked="${airport.goodsService}" disabled/></td>
+          <td>
+            <button type="button" class="btn edit" onclick="enableEdit(this)">Изменить</button>
+            <button type="submit" class="btn save" style="display:none;">Окей</button>
+          </td>
+        </form>
+        <form th:action="@{/manager/airports/delete/{id}(id=${airport.id})}" method="post">
+          <td>
+            <button type="submit" class="btn delete">Удалить</button>
+          </td>
+        </form>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="add-new">
+      <h3>Добавить новый аэропорт</h3>
+      <form th:action="@{/manager/airports/add}" method="post">
+        <div class="form-group">
+          <label for="name">Название:</label>
+          <input type="text" id="name" name="name" placeholder="Введите название" required>
+        </div>
+
+        <div class="form-group">
+          <label for="city">Город:</label>
+          <input type="text" id="city" name="city" placeholder="Введите город" required>
+        </div>
+
+        <div class="form-group">
+          <label for="country">Страна:</label>
+          <input type="text" id="country" name="country" placeholder="Введите страну" required>
+        </div>
+
+        <div class="form-group">
+          <label for="goods__services">Перевозка грузов:</label>
+          <input type="checkbox" id="goods__services" name="goodsService">
+        </div>
+
+        <button type="submit" class="btn add">Добавить</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>&copy; 2024 Управление аэропортами. Все права защищены.</p>
+</footer>
+
+
+</body>
+</html>

@@ -90,7 +90,7 @@
 
 <div class="form-container">
     <h2>Поиск рейсов</h2>
-    <form action="#" th:action="@{/search}" th:object="${}" method="GET">
+    <form action="#" th:action="@{/search}" th:object="${flightSearch}" method="GET">
         <div class="form-group">
             <label for="from">Откуда</label>
             <input type="text" id="from" name="from" class="form-control" placeholder="Введите город отправления" required>

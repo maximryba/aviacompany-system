@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Управление рейсами</title>
+    <link rel="stylesheet" th:href="@{/css/flights.css}">
+</head>
+<body>
+<header>
+    <h1>Страница менеджера: Управление рейсами</h1>
+    <nav>
+        <ul>
+            <li><a th:href="@{/manager}">Главная</a></li>
+            <li><a th:href="@{/airplanes/all}">Самолёты</a></li>
+            <li><a th:href="@{/logout}">Выйти</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <section class="flight-section">
+        <h2>Список рейсов</h2>
+
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Аэропорт отправления</th>
+                <th>Аэропорт назначения</th>
+                <th>Время отправления</th>
+                <th>Время прибытия</th>
+                <th>Стоимость ($)</th>
+                <th>Расстояние (км)</th>
+                <th>Длительность полета (ч)</th>
+                <th>Самолет</th>
+                <th>Действия</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="flight : ${flights}">
+                <form th:action="@{/manager/flights/edit/{id}(id=${flight.id})}" method="post">
+                    <td th:text="${flight.id}"></td>
+                    <td>
+                        <select disabled name="departureAirport" required>
+                            <option th:each="airport : ${airports}"
+                                    th:value="${airport.id}"
+                                    th:text="${airport.name}"
+                                    th:selected="${flight.departureAirport == airport.id}"></option>
+                        </select>
+                    </td>
+                    <td>
+                        <select disabled name="arrivalAirport" required>
+                            <option th:each="airport : ${airports}"
+                                    th:value="${airport.id}"
+                                    th:text="${airport.name}"
+                                    th:selected="${flight.arrivalAirport == airport.id}"></option>
+                        </select>
+                    </td>
+                    <td><input disabled type="time" name="departureTime" th:value="${flight.departureTime}" required/></td>
+                    <td><input disabled type="time" name="arrivalTime" th:value="${flight.arrivalTime}" required/></td>
+                    <td><input disabled type="number" name="cost" th:value="${flight.cost}" required/></td>
+                    <td><input disabled type="number" name="distance" th:value="${flight.distance}" required/></td>
+                    <td><input disabled type="text" name="flightDuration" th:value="${flight.flightDuration}" required/></td>
+                    <td>
+                        <select disabled name="airplaneId" required>
+                            <option th:each="airplane : ${airplanes}"
+                                    th:value="${airplane.id}"
+                                    th:text="${airplane.name}"
+                                    th:selected="${flight.airplaneId == airplane.id}"></option>
+                        </select>
+                    </td>
+                    <td>
+                        <button type="button" class="btn edit" onclick="enableEdit(this)">Изменить</button>
+                        <button type="submit" class="btn save" style="display:none;">Окей</button>
+                    </td>
+                </form>
+                <form th:action="@{/manager/flights/delete/{id}(id=${flight.id})}" method="post">
+                    <td>
+                        <button type="submit" class="btn delete">Удалить</button>
+                    </td>
+                </form>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="add-new">
+            <h3>Добавить новый рейс</h3>
+            <form th:action="@{/manager/flights/add}" method="post">
+                <div class="form-group">
+                    <label for="departureAirportId">Аэропорт отправления:</label>
+                    <select id="departureAirportId" name="departureAirport" required>
+                        <option th:each="airport : ${airports}"
+                                th:value="${airport.id}"
+                                th:text="${airport.name}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="arrivalAirportId">Аэропорт назначения:</label>
+                    <select id="arrivalAirportId" name="arrivalAirport" required>
+                        <option th:each="airport : ${airports}"
+                                th:value="${airport.id}"
+                                th:text="${airport.name}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="departureTime">Время отправления:</label>
+                    <input type="time" id="departureTime" name="departureTime" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="arrivalTime">Время прибытия:</label>
+                    <input type="time" id="arrivalTime" name="arrivalTime" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="cost">Стоимость ($):</label>
+                    <input type="number" id="cost" name="cost" placeholder="Введите стоимость" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="distance">Расстояние (км):</label>
+                    <input type="number" id="distance" name="distance" placeholder="Введите расстояние" required>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="airplaneId">Самолет:</label>
+                    <select id="airplaneId" name="airplaneId" required>
+                        <option th:each="airplane : ${airplanes}"
+                                th:value="${airplane.id}"
+                                th:text="${airplane.name}"></option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn add">Добавить</button>
+            </form>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2024 Управление рейсами. Все права защищены.</p>
+</footer>
+
+<script>
+    // Функция для включения режима редактирования
+    function enableEdit(button) {
+        const row = button.closest('tr');
+
+
+        if (row) {
+            const inputs = row.querySelectorAll('input');
+            const selects = row.querySelectorAll('select');
+            inputs.forEach(input => input.disabled = false);
+            selects.forEach(select => select.disabled = false);
+
+            row.querySelector('.edit').style.display = 'none'; // Скрываем кнопку "Изменить"
+            row.querySelector('.save').style.display = 'inline-block'; // Показываем кнопку "Окей"
+        }
+    }
+
+    // Обработка кнопки "Удалить"
+    document.querySelectorAll('.delete').forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            if (confirm('Вы уверены, что хотите удалить этот рейс?')) {
+                // Обработка удаления рейса
+            } else {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

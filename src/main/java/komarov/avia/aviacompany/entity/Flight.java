@@ -1,21 +1,24 @@
 package komarov.avia.aviacompany.entity;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
+import java.time.LocalTime;
 import java.time.Period;
-import java.util.Date;
 
 @Data
 public class Flight {
     private int id;
     private int departureAirport;
     private int arrivalAirport;
-    private Date departureTime;
-    private Date arrivalTime;
+    @DateTimeFormat(pattern = "HH:mm")
+    private LocalTime departureTime;
+    @DateTimeFormat(pattern = "HH:mm")
+    private LocalTime  arrivalTime;
     private BigDecimal cost;
     private int passengerCount;
     private int distance;
-    private Period flightDuration;
+    private String flightDuration;
     private int airplaneId;
 }

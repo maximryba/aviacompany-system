@@ -76,7 +76,7 @@ main .hero {
 
 .icons a {
     margin-left: 40px;
- }
+}
 
 main .hero h1 {
     font-size: 48px;
@@ -153,4 +153,87 @@ footer ul li a:hover {
     footer ul {
         flex-direction: column;
     }
+}
+
+.form-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.form-container h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+    font-weight: bold;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.form-check {
+    margin-top: 10px;
+}
+
+.form-check-label {
+    font-size: 14px;
+    color: #666;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Дополнительные стили для мобильных устройств */
+@media (max-width: 480px) {
+    .form-container {
+        padding: 15px;
+        max-width: 100%;
+    }
+}
+
+.links {
+    display: flex;
+    flex-direction: column;
+    font-size: 24px;
+    justify-content: flex-start;
+}
+
+.manager__link {
+    color: #007BFF;
+    margin-bottom: 20px;
 }
