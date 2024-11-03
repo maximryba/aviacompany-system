@@ -124,3 +124,23 @@ footer {
     cursor: pointer;
     border-radius: 5px;
 }
+
+.add-new input, 
+.add-new select, 
+.add-new .form-group input, 
+.add-new .form-group select {
+    width: 40%; /* Устанавливаем ширину 40% */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box; /* Это поможет избежать переполнения контейнера */
+}
+
+/* Стили для задизейбленных инпутов и селектов */
+input:disabled, select:disabled {
+    background-color: #e9ecef; /* Светлый фон для задизейбленных инпутов */
+    border: 1px solid #ced4da; /* Лёгкая граница */
+    color: #6c757d; /* Приглушённый текст */
+    cursor: not-allowed; /* Меняем курсор */
+    opacity: 1; /* Чтобы избежать полупрозрачности по умолчанию */
+}

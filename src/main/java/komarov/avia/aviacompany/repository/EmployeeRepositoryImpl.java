@@ -24,6 +24,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         employee.setId(rs.getInt("id"));
         employee.setName(rs.getString("name"));
         employee.setPhone(rs.getString("phone"));
+        employee.setPosition(rs.getString("position"));
         employee.setSalary(rs.getInt("salary"));
         employee.setHireDate(rs.getDate("hire_date"));
         employee.setModifiedDate(rs.getDate("modified_date"));
@@ -53,7 +54,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     @Override
     public int save(Employee employee) {
-        String sql = "insert into employee (name, phone, salary, hire_date, modified_date) values (?, ?, ?, ?, ?)";
+        String sql = "insert into employee (name, phone, position, salary, hire_date, modified_date) values (?, ?, ?, ?, ?, ?)";
 
         LocalDate localDate = employee.getHireDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -62,6 +63,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         return jdbcTemplate.update(sql,
                 employee.getName(),
                 employee.getPhone(),
+                employee.getPosition(),
                 employee.getSalary(),
                 employee.getHireDate(),
                 new Timestamp(System.currentTimeMillis()));
@@ -69,7 +71,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     @Override
     public void update(Employee employee, int id) {
-        String sql = "update employee set name = ?, phone = ?, salary = ?, hire_date = ?, modified_date = NOW() where id = ?";
+        String sql = "update employee set name = ?, phone = ?, position = ?, salary = ?, hire_date = ?, modified_date = NOW() where id = ?";
 
         LocalDate localDate = employee.getHireDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -78,9 +80,9 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         this.jdbcTemplate.update(sql,
                 employee.getName(),
                 employee.getPhone(),
+                employee.getPosition(),
                 employee.getSalary(),
                 employee.getHireDate(),
-                new Timestamp(System.currentTimeMillis()),
                 id);
     }
 
@@ -88,5 +90,18 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     public void delete(int id) {
         String sql = "delete from employee where id = ?";
         this.jdbcTemplate.update(sql, id);
+    }
+    
+    @Override
+    public void assign(Employee employee, int id) {
+    	String firstSql = "select flight_id from flights_employee where employee_id = ?";
+    	Optional<Employee> empl_id = this.jdbcTemplate.query(firstSql, this.employeetRowMapper, employee.getId()).stream().findFirst();
+    	if (empl_id.isPresent()) {
+    		String sql = "update flights_employee set flight_id = ? where employee_id = ?";
+        	this.jdbcTemplate.update(sql, id, employee.getId());
+    	} else {
+    		String sql = "insert into flights_employee (flight_id, employee_id) values (?, ?)";
+        	this.jdbcTemplate.update(sql, employee.getId(), id);
+    	}
     }
 }

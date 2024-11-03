@@ -47,4 +47,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void delete(int id) {
         this.employeeRepository.delete(id);
     }
+    
+    @Transactional
+    @Override
+    public void assign(Employee employee, int id) {
+    	this.employeeRepository.assign(employee, id);
+    }
 }

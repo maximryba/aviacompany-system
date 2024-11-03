@@ -18,4 +18,8 @@ public interface FlightsService {
     int update(int id, Flight flight);
 
     List<Flight> findAllBySearch(FlightSearch flightSearch);
+    
+    List<String> findDepartureCity(String query);
+    
+    List<String> findArrivalCity(String query);
 }

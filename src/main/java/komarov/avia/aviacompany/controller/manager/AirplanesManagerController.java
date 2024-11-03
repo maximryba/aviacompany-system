@@ -44,5 +44,6 @@ public class AirplanesManagerController {
         this.airplanesService.updateAirplane(airplane, id);
         return "redirect:/manager/airplanes/all";
     }
+    
 
 }

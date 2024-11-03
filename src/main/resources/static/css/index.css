@@ -66,16 +66,12 @@ nav .icons a img:hover {
     transform: scale(1.1);
 }
 
-
+/* Hero section */
 main .hero {
     background-color: rgba(255, 255, 255, 0.8);
     padding: 50px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.icons a {
-    margin-left: 40px;
 }
 
 main .hero h1 {
@@ -104,57 +100,7 @@ main .hero .btn-primary:hover {
     background-color: #003366;
 }
 
-footer {
-    background-color: #004d99;
-    color: white;
-    text-align: center;
-    padding: 15px 0;
-    margin-top: auto; /* This ensures the footer sticks to the bottom */
-}
-
-footer p {
-    margin-bottom: 10px;
-}
-
-footer ul {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
-
-footer ul li a {
-    color: white;
-    padding: 5px;
-    transition: color 0.3s ease;
-}
-
-footer ul li a:hover {
-    color: #ffcc00;
-}
-
-/* Адаптивность */
-@media (max-width: 768px) {
-    nav ul {
-        flex-direction: column;
-    }
-
-    main .hero {
-        padding: 20px;
-    }
-
-    main .hero h1 {
-        font-size: 36px;
-    }
-
-    main .hero p {
-        font-size: 16px;
-    }
-
-    footer ul {
-        flex-direction: column;
-    }
-}
-
+/* Form container */
 .form-container {
     background-color: #ffffff;
     padding: 20px;
@@ -218,22 +164,77 @@ footer ul li a:hover {
     background-color: #0056b3;
 }
 
-/* Дополнительные стили для мобильных устройств */
-@media (max-width: 480px) {
-    .form-container {
-        padding: 15px;
-        max-width: 100%;
+/* Footer */
+footer {
+    background-color: #004d99;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    margin-top: auto;
+}
+
+footer p {
+    margin-bottom: 10px;
+}
+
+footer ul {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+footer ul li a {
+    color: white;
+    padding: 5px;
+    transition: color 0.3s ease;
+}
+
+footer ul li a:hover {
+    color: #ffcc00;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+    }
+
+    main .hero {
+        padding: 20px;
+    }
+
+    main .hero h1 {
+        font-size: 36px;
+    }
+
+    main .hero p {
+        font-size: 16px;
+    }
+
+    footer ul {
+        flex-direction: column;
     }
 }
 
-.links {
-    display: flex;
-    flex-direction: column;
-    font-size: 24px;
-    justify-content: flex-start;
+.suggestions {
+    list-style: none;
+    padding: 0;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    background-color: #fff;
+    position: absolute;
+    width: inherit; /* Ширина списка будет равна ширине родительского элемента */
+    z-index: 1000;
+    box-sizing: border-box; /* Убедимся, что границы и отступы учитываются */
 }
 
-.manager__link {
-    color: #007BFF;
-    margin-bottom: 20px;
+.suggestions li {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.suggestions li:hover {
+    background-color: #f0f0f0;
 }

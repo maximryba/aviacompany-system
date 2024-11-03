@@ -10,6 +10,7 @@ public class Employee {
     private int id;
     private String name;
     private String phone;
+    private String position;
     private int salary;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date hireDate;

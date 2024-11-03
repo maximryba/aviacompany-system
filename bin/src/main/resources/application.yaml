@@ -1,0 +1,11 @@
+spring:
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  application:
+    name: aviacompany
+  datasource:
+    url: jdbc:postgresql://localhost:5432/aviacompany
+    username: root
+    password: root
+server:
+  port: 8080

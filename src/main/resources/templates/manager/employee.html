@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Управление сотрудниками</title>
     <link rel="stylesheet" th:href="@{/css/employee.css}">
+    <script th:src="@{/js/manager-employee.js}"></script>
 </head>
 <body>
 <header>
@@ -27,6 +28,7 @@
                 <th>ID</th>
                 <th>Имя</th>
                 <th>Телефон</th>
+                <th>Должность</th>
                 <th>Зарплата ($)</th>
                 <th>Дата найма</th>
                 <th>Дата изменения</th>
@@ -40,8 +42,17 @@
                     <td th:text="${employee.id}"></td>
                     <td><input disabled type="text" name="name" th:value="${employee.name}" required/></td>
                     <td><input disabled type="tel" name="phone" th:value="${employee.phone}" required/></td>
+                    <td>
+						<select disabled name="position" required>
+                            <option th:each="position : ${positions}"
+                                    th:value="${position}"
+                                    th:text="${position}"
+                                    th:selected="${employee.position == position}"></option>
+                        </select>
+					</td>
                     <td><input disabled type="number" name="salary" th:value="${employee.salary}" required/></td>
                     <td><input disabled type="date" name="hireDate" th:value="${employee.hireDate}" required/></td>
+                    <td><p th:text="${employee.modifiedDate}"></p></td>
                     <td>
                         <button type="button" class="btn edit" onclick="enableEdit(this)">Изменить</button>
                         <button type="submit" class="btn save" style="display:none;">Окей</button>
@@ -68,6 +79,15 @@
                     <label for="phone">Телефон:</label>
                     <input type="tel" id="phone" name="phone" placeholder="Введите телефон" required>
                 </div>
+                
+                <div class="form-group">
+					<label for="phone">Должность:</label>
+					<select name="position" required>
+                            <option th:each="position : ${positions}"
+                                    th:value="${position}"
+                                    th:text="${position}"></option>
+                        </select>
+				</div>
 
                 <div class="form-group">
                     <label for="salary">Зарплата ($):</label>
@@ -89,18 +109,6 @@
     <p>&copy; 2024 Управление сотрудниками. Все права защищены.</p>
 </footer>
 
-<script>
-    // Функция для включения режима редактирования
-    function enableEdit(button) {
-        const row = button.closest('tr');
-        if (row) {
-            const inputs = row.querySelectorAll('input');
-            inputs.forEach(input => input.disabled = false);
-            row.querySelector('.edit').style.display = 'none'; // Скрываем кнопку "Изменить"
-            row.querySelector('.save').style.display = 'inline-block'; // Показываем кнопку "Окей"
-        }
-    }
-</script>
 
 </body>
 </html>

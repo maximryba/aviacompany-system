@@ -18,4 +18,8 @@ public interface FlightRepository {
     int update(int id, Flight flight);
 
     List<Flight> findBySearch(String departureCity, String destinationCity, Date departureDate, int passengerCount);
+
+	List<String> findArrivalCities(String query);
+
+	List<String> findDepartureCities(String query);
 }

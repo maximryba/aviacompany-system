@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Управление ресурсами</title>
+    <link rel="stylesheet" th:href="@{/css/resources.css}">
+    <script th:src="@{/js/manager-resources.js}"></script>
+</head>
+<body>
+<header>
+    <h1>Страница менеджера: Управление ресурсами</h1>
+    <nav>
+        <ul>
+            <li><a th:href="@{/manager}">Главная</a></li>
+            <li><a th:href="@{/resources/all}">Ресурсы</a></li>
+            <li><a th:href="@{/logout}">Выйти</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <section class="resource-section">
+        <h2>Список ресурсов</h2>
+
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Тип ресурса</th>
+                <th>Стоимость (BYN)</th>
+                <th>ID Полёта</th>
+                <th>Действия</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="resource : ${resources}">
+                <form th:action="@{/manager/resources/edit/{id}(id=${resource.id})}" method="post">
+                    <td th:text="${resource.id}"></td>
+                    <td>
+						<select name="resourceType" required disabled>
+						    <option th:each="type : ${T(komarov.avia.aviacompany.entity.ResourceType).values()}" 
+						        th:value="${type}" th:text="${type}"
+						        th:selected="${resource != null and resource.resourceType == type}"></option>
+						</select>
+					</td>
+                    <td><input disabled type="number" step="0.01" name="cost" th:value="${resource.cost}" required/></td>
+                    <td><select disabled name="flightId" required>
+                            <option th:each="flight : ${flights}"
+                                    th:value="${flight.id}"
+                                    th:text="${flight.id}"
+                                    th:selected="${resource.flightId == flight.id}"></option>
+                        </select></td>
+                    <td>
+                        <button type="button" class="btn edit" onclick="enableEdit(this)">Изменить</button>
+                        <button type="submit" class="btn save" style="display:none;">Окей</button>
+                    </td>
+                </form>
+                <form th:action="@{/manager/resources/delete/{id}(id=${resource.id})}" method="post">
+                    <td>
+                        <button type="submit" class="btn delete">Удалить</button>
+                    </td>
+                </form>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="add-new">
+            <h3>Добавить новый ресурс</h3>
+            <form th:action="@{/manager/resources/add}" method="post">
+                <div class="form-group">
+                    <label for="resourceType">Тип ресурса:</label>
+				     <select name="resourceType" required>
+						    <option th:each="type : ${T(komarov.avia.aviacompany.entity.ResourceType).values()}" 
+						        th:value="${type}" th:text="${type}"
+						        th:selected="${resource != null and resource.resourceType == type}"></option>
+						</select>
+                </div>
+
+                <div class="form-group">
+                    <label for="cost">Стоимость (BYN):</label>
+                    <input type="number" id="cost" step="0.01" name="cost" placeholder="Введите стоимость" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="flightId">ID Полёта:</label>
+                    <select name="flightId" required>
+                            <option th:each="flight : ${flights}"
+                                    th:value="${flight.id}"
+                                    th:text="${flight.id}"></option>
+                        </select>
+                </div>
+
+                <button type="submit" class="btn add">Добавить</button>
+            </form>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2024 Управление ресурсами. Все права защищены.</p>
+</footer>
+
+
+</body>
+</html>

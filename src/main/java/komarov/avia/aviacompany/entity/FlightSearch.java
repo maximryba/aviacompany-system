@@ -1,5 +1,4 @@
 package komarov.avia.aviacompany.entity;
-
 import lombok.Data;
 
 import java.util.Date;

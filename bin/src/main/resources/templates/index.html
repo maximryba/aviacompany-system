@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <title>Airline Home</title>
+</head>
+<body>
+<!-- Header -->
+<header>
+    <nav>
+        <ul>
+            <li><a th:href="@{/}">Home</a></li>
+            <li><a th:href="@{/flights/list}">Flights</a></li>
+            <li><a th:href="@{/contact}">Contact Us</a></li>
+            <li><a th:href="@{/about}">About Us</a></li>
+        </ul>
+        <div class="icons">
+            <a th:href="@{/profile}">
+                <img th:src="@{/images/user.png}" alt="Profile" width="40" height="40"/>
+            </a>
+            <a th:href="@{/cart}">
+                <img th:src="@{/images/basket.png}" alt="Cart" width="40" height="40"/>
+            </a>
+        </div>
+    </nav>
+</header>
+
+<!-- Main Content -->
+<main>
+    <section class="hero">
+        <h1>Welcome to Our Airline</h1>
+        <p>Your journey to the skies begins here. Explore our flights and find the best offers today!</p>
+        <div class="form-container">
+            <h2>Поиск рейсов</h2>
+            <form th:action="@{/search}" th:object="${flightSearch}" method="GET">
+                <div class="form-group">
+                    <label for="from">Откуда</label>
+                    <input type="text" id="from" name="from" class="form-control" placeholder="Введите город отправления" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="to">Куда</label>
+                    <input type="text" id="to" name="to" class="form-control" placeholder="Введите город назначения" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="departureDate">Когда</label>
+                    <input type="date" id="departureDate" name="departureDate" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="returnDate">Когда обратно</label>
+                    <input type="date" id="returnDate" name="returnDate" class="form-control">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="noReturn" onchange="toggleReturnDate(this)">
+                        <label class="form-check-label" for="noReturn">Обратный билет не нужен</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="passengers">Количество пассажиров</label>
+                    <input type="number" id="passengers" name="passengers" class="form-control" min="1" placeholder="1" required>
+                </div>
+
+                <button type="submit" class="btn">Найти рейс</button>
+            </form>
+        </div>
+
+        <script>
+            function toggleReturnDate(checkbox) {
+                const returnDateInput = document.getElementById('returnDateInput');
+                if (checkbox.checked) {
+                    returnDateInput.disabled = true;
+                    returnDateInput.value = ''; // сбросить значение поля, если билет не нужен
+                } else {
+                    returnDateInput.disabled = false;
+                }
+            }
+        </script>
+    </section>
+</main>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2024 Airline. All rights reserved.</p>
+    <ul>
+        <li><a th:href="@{/terms}">Terms of Service</a></li>
+        <li><a th:href="@{/privacy}">Privacy Policy</a></li>
+    </ul>
+</footer>
+</body>
+</html>

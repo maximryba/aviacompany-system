@@ -1,113 +1,70 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Flights</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        header {
-            background-color: #007BFF;
-            color: #ffffff;
-            padding: 10px 0;
-            text-align: center;
-        }
-        .container {
-            width: 80%;
-            margin: auto;
-            overflow: hidden;
-            padding: 20px;
-            background-color: #ffffff;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        th, td {
-            padding: 12px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-        th {
-            background-color: #007BFF;
-            color: white;
-        }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        .button {
-            background-color: #28a745;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-        .button-danger {
-            background-color: #dc3545;
-        }
-        .button:hover {
-            opacity: 0.8;
-        }
-        footer {
-            text-align: center;
-            padding: 10px;
-            background-color: #007BFF;
-            color: white;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-        }
-    </style>
+    <title>Flight List</title>
+    <link rel="stylesheet" th:href="@{/css/flights_list.css}">
 </head>
 <body>
 
 <header>
-    <h1>Available Flights</h1>
+    <nav>
+        <ul>
+            <li><a th:href="@{/}">Главная</a></li>
+            <li><a th:href="@{/flights/list}">Рейсы</a></li>
+            <li><a th:href="@{/contact}">Связаться с нами</a></li>
+            <li><a th:href="@{/about}">О нас</a></li>
+        </ul>
+        <div class="icons">
+            <a th:href="@{/profile}">
+                <img th:src="@{/images/user.png}" alt="Профиль" width="40" height="40"/>
+            </a>
+            <a th:href="@{/cart}">
+                <img th:src="@{/images/basket.png}" alt="Корзина" width="40" height="40"/>
+            </a>
+        </div>
+    </nav>
 </header>
 
 <div class="container">
-    <h2>Flight List</h2>
-    <a th:href="@{/flights/create}" class="button">Add New Flight</a>
+    <h1>Расписание рейсов</h1>
+
     <table>
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Flight Number</th>
-            <th>Origin</th>
-            <th>Destination</th>
-            <th>Departure Time</th>
-            <th>Actions</th>
+            <th>Аэропорт отправления</th>
+            <th>Аэропорт прибытия</th>
+            <th>Время отправления</th>
+            <th>Время прибытия</th>
+            <th>Время в пути</th>
+            <th>Стоимость (BYN)</th>
+            <th>Заказать</th>
         </tr>
         </thead>
-        <tbody>
-        <tr th:each="flight : ${flights}">
-            <td th:text="${flight.id}"></td>
-            <td th:text="${flight.flightNumber}"></td>
-            <td th:text="${flight.origin}"></td>
-            <td th:text="${flight.destination}"></td>
-            <td th:text="${flight.departureTime}"></td>
-            <td>
-                <a th:href="@{/flights/edit/{id}(id=${flight.id})}" class="button">Edit</a>
-                <a th:href="@{/flights/delete/{id}(id=${flight.id})}" class="button button-danger">Delete</a>
-            </td>
-        </tr>
-        </tbody>
+		<tbody>
+		    <!-- Loop through flight list -->
+		    <tr th:each="flight : ${flights}">
+		        <td th:text="${airportMap[flight.departureAirport].city} + ' - ' + ${airportMap[flight.departureAirport].name}">Аэропорт отправления</td>
+		        <td th:text="${airportMap[flight.arrivalAirport].city} + ' - ' + ${airportMap[flight.arrivalAirport].name}">Аэропорт прибытия</td>
+		        <td th:text="${flight.departureTime}">Время отправления</td>
+		        <td th:text="${flight.arrivalTime}">Время прибытия</td>
+		        <td th:text="${flight.flightDuration}">Время в пути</td>
+		        <td th:text="${flight.cost}">Стоимость</td>
+		        <td><a class="btn" href="/booking">Заказать</a></td>
+		    </tr>
+		</tbody>
     </table>
+
+    
 </div>
 
+<!-- Футер -->
 <footer>
-    <p>&copy; 2024 Airline Company. All rights reserved.</p>
+    <p>&copy; 2024 Авиакомпания. Все права защищены.</p>
+    <ul>
+        <li><a th:href="@{/terms}">Условия использования</a></li>
+        <li><a th:href="@{/privacy}">Политика конфиденциальности</a></li>
+    </ul>
 </footer>
 
 </body>

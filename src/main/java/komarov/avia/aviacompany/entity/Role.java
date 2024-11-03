@@ -1,5 +1,5 @@
 package komarov.avia.aviacompany.entity;
 
 public enum Role {
-    USER, ADMIN, MANAGER
+    ROLE_USER, ROLE_MANAGER, ROLE_ADMIN
 }

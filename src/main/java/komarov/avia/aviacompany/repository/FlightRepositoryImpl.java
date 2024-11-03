@@ -104,8 +104,7 @@ public class FlightRepositoryImpl implements FlightRepository {
         String sql = "SELECT * FROM flights " +
                 "JOIN airports as dep ON flights.departure_airport = dep.id " +
                 "JOIN airports as arr ON flights.arrival_airport = arr.id" +
-                " WHERE dep.city = ? AND arr.city = ? AND arrival_time = ? AND " +
-                "passenger_count = ?";
+                " WHERE dep.city = ? AND arr.city = ? AND arrival_time = ?";
         return jdbcTemplate.query(sql, flightRowMapper, departureCity, destinationCity, departureDate, passengerCount);
     }
 
@@ -120,5 +119,24 @@ public class FlightRepositoryImpl implements FlightRepository {
         // Формируем строку в формате SQL INTERVAL
         return String.format("'%d hours %d minutes'", hours, minutes);
     }
+
+    @Override
+    public List<String> findDepartureCities(String query) {
+        String sql = "SELECT DISTINCT a.city " +
+                     "FROM flights f " +
+                     "JOIN airports a ON f.departure_airport = a.id " +
+                     "WHERE LOWER(a.city) LIKE LOWER(?)";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> rs.getString("city"), query);
+    }
+
+    @Override
+    public List<String> findArrivalCities(String query) {
+        String sql = "SELECT DISTINCT a.city " +
+                     "FROM flights f " +
+                     "JOIN airports a ON f.arrival_airport = a.id " +
+                     "WHERE LOWER(a.city) LIKE LOWER(?)";
+        return this.jdbcTemplate.query(sql, (rs, rowNum) -> rs.getString("city"), query);
+    }
+
 
 }

@@ -1,0 +1,51 @@
+/* Стили для контейнера с рейсами */
+.flights-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.flight-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px 0;
+    width: 100%;
+    max-width: 600px; /* Максимальная ширина карточки */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.flight-card:hover {
+    transform: scale(1.02);
+}
+
+.flight-card h2 {
+    color: #004d99;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.flight-card p {
+    font-size: 16px;
+    margin:  10px 0;
+}
+
+.flight-card .btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.flight-card .btn:hover {
+    background-color: #0056b3;
+}
