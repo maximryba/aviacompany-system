@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Flight List</title>
-    <link rel="stylesheet" th:href="@{/css/flights_list.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/flights_list.css}">
+    <script th:src="@{/js/flights_list.js}"></script>
 </head>
 <body>
 
@@ -16,9 +17,18 @@
             <li><a th:href="@{/about}">О нас</a></li>
         </ul>
         <div class="icons">
-            <a th:href="@{/profile}">
-                <img th:src="@{/images/user.png}" alt="Профиль" width="40" height="40"/>
-            </a>
+            <div class="profile-container" onclick="toggleProfileMenu()">
+                <a th:href="@{/profile}">
+                    <img th:src="@{/images/user.png}" alt="Профиль" width="40" height="40"/>
+                </a>
+                <div id="profileMenu" class="profile-menu">
+                    <span th:if="${currentUser  != null}" th:text="${currentUser .username}">Имя пользователя</span> <!-- Имя текущего пользователя -->
+                    <a th:if="${currentUser  != null}" th:href="@{/profile}">Посмотреть профиль</a>
+                    <a th:if="${currentUser  != null}" th:href="@{/orders}">Мои заказы</a>
+                    <a th:if="${currentUser  == null}" th:href="@{/auth/sign-in}">Войти</a> <!-- Ссылка на логин, если пользователь не вошел -->
+                    <a th:if="${currentUser  != null}" th:href="@{/logout}">Выйти</a> <!-- Ссылка на выход, если пользователь вошел -->
+                </div>
+            </div>
             <a th:href="@{/cart}">
                 <img th:src="@{/images/basket.png}" alt="Корзина" width="40" height="40"/>
             </a>

@@ -23,7 +23,7 @@ public class AirplanesManagerController {
     }
 
     @PostMapping("/add")
-    public String addAirplane(@RequestBody Airplane airplane) {
+    public String addAirplane(@ModelAttribute Airplane airplane) {
 
         this.airplanesService.addAirplane(airplane);
         System.out.println("Plane name: " + airplane.getName());

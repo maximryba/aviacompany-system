@@ -100,12 +100,12 @@ public class FlightRepositoryImpl implements FlightRepository {
     }
 
     @Override
-    public List<Flight> findBySearch(String departureCity, String destinationCity, Date departureDate, int passengerCount) {
+    public List<Flight> findBySearch(String departureCity, String destinationCity, int passengerCount) {
         String sql = "SELECT * FROM flights " +
                 "JOIN airports as dep ON flights.departure_airport = dep.id " +
                 "JOIN airports as arr ON flights.arrival_airport = arr.id" +
-                " WHERE dep.city = ? AND arr.city = ? AND arrival_time = ?";
-        return jdbcTemplate.query(sql, flightRowMapper, departureCity, destinationCity, departureDate, passengerCount);
+                " WHERE dep.city = ? AND arr.city = ?";
+        return jdbcTemplate.query(sql, flightRowMapper, departureCity, destinationCity);
     }
 
     public static String calculateFlightDurationAsInterval(LocalTime departureTime, LocalTime arrivalTime) {

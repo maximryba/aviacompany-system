@@ -24,6 +24,6 @@ public class FlightsRestController {
         } else if ("to".equals(field)) {
             return flightsService.findArrivalCity(query);
         }
-        return List.of();  // Пустой список, если поле не соответствует "from" или "to"
+        return List.of();
     }
 }

@@ -33,9 +33,7 @@ public class UserRepository {
 
         return jdbcTemplate.query(sql, this.userRowMapper);
     }
-    
-    
-	
+
 	public Optional<User> findByUsername(String username) {
 		String sql = "select * from users where username = ?";
 		return Optional.ofNullable(jdbcTemplate.queryForObject(sql, this.userRowMapper, username));
@@ -63,23 +61,21 @@ public class UserRepository {
     
     public User save(User user) {
     	String sql = "insert into users (username, password, email, phone, role) values (?, ?, ?, ?, ?)";
-    	int userId = this.jdbcTemplate.update(sql, user.getUsername(),
+    	this.jdbcTemplate.update(sql, user.getUsername(),
     			user.getPassword(),
     			user.getEmail(),
     			user.getPhone(),
-    			Role.ROLE_USER);
-    	String searchSql = "select * from users where id = ?";
-    	return this.jdbcTemplate.queryForObject(searchSql, this.userRowMapper, userId);
+    			Role.USER.name());
+    	String searchSql = "select * from users where email = ?";
+    	return this.jdbcTemplate.queryForObject(searchSql, this.userRowMapper, user.getEmail());
     }
     
     public User update(User user, int id) {
-    	String sql = "udpate users set username = ?, password = ?, email = ? where id = ?";
+    	String sql = "update users set username = ?, password = ?, email = ? where id = ?";
     	int userId = this.jdbcTemplate.update(sql, 
     			user.getUsername(),
     			user.getPassword(),
     			user.getEmail());
     	return this.jdbcTemplate.queryForObject(sql, this.userRowMapper, userId);
     }
-    
-    
 }

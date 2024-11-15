@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
     private final UserRepository repository;
 
     /**
@@ -43,6 +44,18 @@ public class UserService {
         }
 
         return save(user);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<User> user = this.repository.findByUsername(username);
+        if (user.isEmpty()) {
+            throw new UsernameNotFoundException("User " + username + " not found");
+        }
+        return org.springframework.security.core.userdetails.User.withUsername(user.get().getUsername())
+                .password(user.get().getPassword())
+                .roles(user.get().getRole().name())
+                .build();
     }
 
     /**

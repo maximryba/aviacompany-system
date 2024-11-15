@@ -8,6 +8,7 @@ public class Passenger {
     private String firstName;
     private String lastName;
     private int userId;
-    private int flightId;
-    private int seatId;
+    private String phone;
+    private String email;
+    private String passport;
 }

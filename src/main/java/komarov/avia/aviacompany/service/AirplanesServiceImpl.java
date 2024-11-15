@@ -4,6 +4,7 @@ import komarov.avia.aviacompany.entity.Airplane;
 import komarov.avia.aviacompany.repository.AirplanesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,16 +30,19 @@ public class AirplanesServiceImpl implements AirplanesService {
         return this.airplanesRepository.getAirplaneByName(name);
     }
 
+    @Transactional
     @Override
     public int addAirplane(Airplane airplane) {
         return this.airplanesRepository.saveAirplane(airplane);
     }
 
+    @Transactional
     @Override
     public void updateAirplane(Airplane airplane, int id) {
         this.airplanesRepository.updateAirplane(airplane, id);
     }
 
+    @Transactional
     @Override
     public void deleteAirplane(int id) {
         this.airplanesRepository.deleteAirplane(id);

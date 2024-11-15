@@ -24,8 +24,7 @@ public class FlightsServiceImpl implements FlightsService {
 
     @Override
     public List<Flight> findAllBySearch(FlightSearch search) {
-        return this.flightRepository.findBySearch(search.getDepartureCity(), search.getDestinationCity(),
-                search.getDepartureDate(), search.getPassengerCount());
+        return this.flightRepository.findBySearch(search.getDepartureCity(), search.getDestinationCity(), search.getPassengerCount());
     }
 
 

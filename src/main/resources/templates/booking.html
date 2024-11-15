@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/schema/security" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/booking.css}">
+    <script th:src="@{/js/booking.js}"></script>
+    <title>Заказ билета</title>
+</head>
+<body>
+<!-- Хедер -->
+<header>
+    <nav>
+        <ul>
+            <li><a th:href="@{/}">Главная</a></li>
+            <li><a th:href="@{/flights/list}">Рейсы</a></li>
+            <li><a th:href="@{/contact}">Связаться с нами</a></li>
+            <li><a th:href="@{/about}">О нас</a></li>
+            <li sec:authorize="hasRole('MANAGER')">
+                <a th:href="@{/manager}">Страница менеджера</a>
+            </li>
+        </ul>
+        <div class="icons">
+            <div class="profile-container" onclick="toggleProfileMenu()">
+                <a th:href="@{/profile}">
+                    <img th:src="@{/images/user.png}" alt="Профиль" width="40" height="40"/>
+                </a>
+                <div id="profileMenu" class="profile-menu">
+                    <span th:if="${currentUser != null}" th:text="${currentUser .username}">Имя пользователя</span>
+                    <a th:if="${currentUser != null}" th:href="@{/profile}">Посмотреть профиль</a>
+                    <a th:if="${currentUser != null}" th:href="@{/orders}">Мои заказы</a>
+                    <a th:if="${currentUser == null}" th:href="@{/auth/sign-in}">Войти</a>
+                    <a th:if="${currentUser != null}" th:href="@{/logout}">Выйти</a>
+                </div>
+            </div>
+            <a th:href="@{/cart}">
+                <img th:src="@{/images/basket.png}" alt="Корзина" width="40" height="40"/>
+            </a>
+        </div>
+    </nav>
+</header>
+
+<!-- Основное содержание -->
+<main>
+    <section class="order">
+        <h1>Заказ билета</h1>
+        <div class="flight-details">
+            <h2>Информация о рейсе</h2>
+            <p><strong>Откуда:</strong> <span th:text="${flight.departureAirport}">Москва</span></p>
+            <p><strong>Куда:</strong> <span th:text="${flight.arrivalAirport}">Санкт-Петербург</span></p>
+            <p><strong>Дата и время вылета:</strong> <span th:text="${flight.departureTime}">2024-05-01 10:00</span></p>
+            <p><strong>Длительность:</strong> <span th:text="${flight.flightDuration}">1ч 30м</span></p>
+            <p><strong>Цена:</strong> <span th:text="${flight.cost}">5000 руб.</span></p>
+        </div>
+
+        <h2>Данные о пассажирах</h2>
+        <form th:action="@{/confirm}" method="POST">
+            <div class="form-group">
+                <label for="existingPassenger">Выберите пассажира</label>
+                <select id="existingPassenger" name="existingPassengerId" class="form-control">
+                    <option value="">-- Выберите пассажира --</option>
+                    <option th:each="passenger : ${passengers}"
+                            th:value="${passenger.id}"
+                            th:text="${passenger.firstName} + ' ' + ${passenger.lastName}"></option>
+                </select>
+                <button type="button" class="btn" onclick="window.location.href='@{/passenger/add}'">Добавить нового пассажира</button>
+            </div>
+
+            <div class="form-group">
+                <label for="passengerCount">Количество пассажиров</label>
+                <input required type="number" id="passengerCount" name="passengerCount" class="form-control" min="1" value="1">
+            </div>
+
+            <button type="submit" class="btn">Подтвердить заказ</button>
+        </form>
+    </section>
+</main>
+
+<!-- Футер -->
+<footer>
+    <p>&copy; 2024 Авиакомпания. Все права защищены.</p>
+    <ul>
+        <li><a th:href="@{/terms}">Условия использования</a></li>
+        <li><a th:href="@{/privacy}">Политика конфиденциальности</a></li>
+    </ul>
+</footer>
+</body>
+</html>

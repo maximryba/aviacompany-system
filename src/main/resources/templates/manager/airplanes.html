@@ -22,6 +22,7 @@
     <section class="plane-section">
         <h2>Список самолётов</h2>
 
+        <div class="airplane-list">
         <table>
             <thead>
             <tr>
@@ -39,9 +40,9 @@
                 <form th:action="@{/manager/airplanes/edit/{id}(id=${plane.id})}" method="post">
                     <td th:text="${plane.id}"></td>
                     <td><input type="text" name="name" th:value="${plane.name}" required disabled/></td>
-                    <td><input type="number" name="fuelСapacity" th:value="${plane.fuelCapacity}" required disabled/></td>
-                    <td><input type="number" name="passengerСapacity" th:value="${plane.passengerCapacity}" required disabled/></td>
-                    <td><input type="number" name="serviceСost" th:value="${plane.serviceCost}" required disabled/></td>
+                    <td><input type="number" name="fuelCapacity" th:value="${plane.fuelCapacity}" required disabled/></td>
+                    <td><input type="number" name="passengerCapacity" th:value="${plane.passengerCapacity}" required disabled/></td>
+                    <td><input type="number" name="serviceCost" th:value="${plane.serviceCost}" required disabled/></td>
                     <td>
                         <button type="button" class="btn edit" onclick="enableEdit(this)">Изменить</button>
                         <button type="submit" class="btn save" style="display:none;">Окей</button>
@@ -55,6 +56,7 @@
             </tr>
             </tbody>
         </table>
+        </div>
 
         <div class="add-new">
             <h3>Добавить новый самолёт</h3>
@@ -66,17 +68,17 @@
 
                 <div class="form-group">
                     <label for="fuel_capacity">Вместимость топлива (л):</label>
-                    <input type="text" id="fuel_capacity" name="fuelСapacity" placeholder="Введите вместимость топлива" required>
+                    <input type="text" id="fuel_capacity" name="fuelCapacity" placeholder="Введите вместимость топлива" required>
                 </div>
 
                 <div class="form-group">
                     <label for="passenger_capacity">Вместимость пассажиров:</label>
-                    <input type="text" id="passenger_capacity" name="passengerСapacity" placeholder="Введите вместимость пассажиров" required>
+                    <input type="text" id="passenger_capacity" name="passengerCapacity" placeholder="Введите вместимость пассажиров" required>
                 </div>
 
                 <div class="form-group">
                     <label for="service_cost">Стоимость услуг ($):</label>
-                    <input type="text" id="service_cost" name="serviceСost" placeholder="Введите стоимость услуг" required>
+                    <input type="text" id="service_cost" name="serviceCost" placeholder="Введите стоимость услуг" required>
                 </div>
 
                 <button type="submit" class="btn add">Добавить</button>

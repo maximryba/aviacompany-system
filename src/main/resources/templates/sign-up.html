@@ -22,6 +22,12 @@
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" class="form-control" required/>
             </div>
+            <div class="form-group">
+                <label for="phone">Phone:</label>
+                <input type="tel" id="phone" name="phone" class="form-control" required
+                       pattern="^\d{9,}$" title="Пожалуйста, вводите просто цифры в номере телефона"/>
+                <small class="form-text text-muted">Формат: 375КОДХХХХХХХ</small>
+            </div>
             <button type="submit" class="btn btn-primary">Sign Up</button>
         </form>
     </div>

@@ -144,3 +144,9 @@ input:disabled, select:disabled {
     cursor: not-allowed; /* Меняем курсор */
     opacity: 1; /* Чтобы избежать полупрозрачности по умолчанию */
 }
+
+.airplane-list {
+    max-height: 400px; /* Установите максимальную высоту для контейнера */
+    overflow-y: auto; /* Включите вертикальную прокрутку */
+    margin-bottom: 20px; /* Отступ снизу */
+}

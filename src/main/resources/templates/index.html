@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/schema/security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,11 +17,23 @@
             <li><a th:href="@{/flights/list}">Рейсы</a></li>
             <li><a th:href="@{/contact}">Связаться с нами</a></li>
             <li><a th:href="@{/about}">О нас</a></li>
+            <li sec:authorize="hasRole('MANAGER')">
+                <a th:href="@{/manager}">Страница менеджера</a>
+            </li>
         </ul>
         <div class="icons">
-            <a th:href="@{/profile}">
-                <img th:src="@{/images/user.png}" alt="Профиль" width="40" height="40"/>
-            </a>
+            <div class="profile-container" onclick="toggleProfileMenu()">
+                <a th:href="@{/profile}">
+                    <img th:src="@{/images/user.png}" alt="Профиль" width="40" height="40"/>
+                </a>
+                <div id="profileMenu" class="profile-menu">
+                    <span th:if="${currentUser  != null}" th:text="${currentUser .username}">Имя пользователя</span> <!-- Имя текущего пользователя -->
+                    <a th:if="${currentUser  != null}" th:href="@{/profile}">Посмотреть профиль</a>
+                    <a th:if="${currentUser  != null}" th:href="@{/orders}">Мои заказы</a>
+                    <a th:if="${currentUser  == null}" th:href="@{/auth/sign-in}">Войти</a> <!-- Ссылка на логин, если пользователь не вошел -->
+                    <a th:if="${currentUser  != null}" th:href="@{/logout}">Выйти</a> <!-- Ссылка на выход, если пользователь вошел -->
+                </div>
+            </div>
             <a th:href="@{/cart}">
                 <img th:src="@{/images/basket.png}" alt="Корзина" width="40" height="40"/>
             </a>
@@ -46,11 +59,6 @@
 			        <label for="to">Куда</label>
 			        <input required type="text" id="to" name="destinationCity" class="form-control" placeholder="Введите город назначения" onkeyup="fetchCities('to')">
 			        <ul id="toSuggestions" class="suggestions"></ul> <!-- Список для подсказок -->
-			    </div>
-
-			    <div class="form-group">
-			        <label for="departureDate">Дата отправления</label>
-			        <input type="date" id="departureDate" name="departureDate" class="form-control" required>
 			    </div>
 
 			    <div class="form-group">

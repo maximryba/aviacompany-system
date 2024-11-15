@@ -19,4 +19,7 @@ public class SignUpRequest {
 
     @Size(max = 255, message = "Длина пароля должна быть не более 255 символов")
     private String password;
+
+    @Size(min = 9, message = "Номер телефона не может быть меньше 9 цифр")
+    private String phone;
 }

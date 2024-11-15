@@ -124,8 +124,8 @@ footer {
     padding: 10px 0;
     background-color: #333;
     color: white;
-    position: fixed;
     width: 100%;
+    margin-top: 50px;
     bottom: 0;
 }
 
@@ -136,4 +136,10 @@ footer {
     border: none;
     cursor: pointer;
     border-radius: 5px;
+}
+
+.flight-list {
+    max-height: 400px; /* Установите максимальную высоту для контейнера */
+    overflow-y: auto; /* Включите вертикальную прокрутку */
+    margin-bottom: 20px; /* Отступ снизу */
 }
