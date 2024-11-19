@@ -27,7 +27,7 @@
                     <img th:src="@{/images/user.png}" alt="Профиль" width="40" height="40"/>
                 </a>
                 <div id="profileMenu" class="profile-menu">
-                    <span th:if="${currentUser != null}" th:text="${currentUser .username}">Имя пользователя</span>
+                    <span th:if="${currentUser != null}" th:text="${currentUser.username}">Имя пользователя</span>
                     <a th:if="${currentUser != null}" th:href="@{/profile}">Посмотреть профиль</a>
                     <a th:if="${currentUser != null}" th:href="@{/orders}">Мои заказы</a>
                     <a th:if="${currentUser == null}" th:href="@{/auth/sign-in}">Войти</a>
@@ -49,29 +49,38 @@
             <h2>Информация о рейсе</h2>
             <p><strong>Откуда:</strong> <span th:text="${flight.departureAirport}">Москва</span></p>
             <p><strong>Куда:</strong> <span th:text="${flight.arrivalAirport}">Санкт-Петербург</span></p>
-            <p><strong>Дата и время вылета:</strong> <span th:text="${flight.departureTime}">2024-05-01 10:00</span></p>
+            <p><strong>Дата и время вылета:</strong> < span th:text="${flight.departureTime}">2024-05-01 10:00</span></p>
             <p><strong>Длительность:</strong> <span th:text="${flight.flightDuration}">1ч 30м</span></p>
             <p><strong>Цена:</strong> <span th:text="${flight.cost}">5000 руб.</span></p>
+        </div>
+
+        <h2>Выбор мест</h2>
+        <div class="seat-selection">
+            <div class="seat-row">
+                <div class="seat available" onclick="selectSeat(this)">1A</div>
+                <div class="seat available" onclick="selectSeat(this)">1B</div>
+                <div class="seat occupied">1C</div>
+                <div class="seat available" onclick="selectSeat(this)">1D</div>
+            </div>
+            <div class="seat-row">
+                <div class="seat available" onclick="selectSeat(this)">2A</div>
+                <div class="seat occupied">2B</div>
+                <div class="seat available" onclick="selectSeat(this)">2C</div>
+                <div class="seat available" onclick="selectSeat(this)">2D</div>
+            </div>
+            <!-- Добавьте дополнительные ряды по мере необходимости -->
         </div>
 
         <h2>Данные о пассажирах</h2>
         <form th:action="@{/confirm}" method="POST">
             <div class="form-group">
-                <label for="existingPassenger">Выберите пассажира</label>
-                <select id="existingPassenger" name="existingPassengerId" class="form-control">
-                    <option value="">-- Выберите пассажира --</option>
-                    <option th:each="passenger : ${passengers}"
-                            th:value="${passenger.id}"
-                            th:text="${passenger.firstName} + ' ' + ${passenger.lastName}"></option>
-                </select>
-                <button type="button" class="btn" onclick="window.location.href='@{/passenger/add}'">Добавить нового пассажира</button>
-            </div>
-
-            <div class="form-group">
                 <label for="passengerCount">Количество пассажиров</label>
-                <input required type="number" id="passengerCount" name="passengerCount" class="form-control" min="1" value="1">
+                <input required type="number" id="passengerCount" name="passengerCount" class="form-control" min="1" value="1" onchange="updatePassengerSelects()">
             </div>
 
+            <div id="passengerSelectsContainer"></div>
+
+            <a class="btn" th:href="@{/passenger/add/{username}(username=${currentUser.getUsername()})/{flightId}(flightId=${flight.id})}">Добавить нового пассажира</a>
             <button type="submit" class="btn">Подтвердить заказ</button>
         </form>
     </section>
@@ -85,5 +94,6 @@
         <li><a th:href="@{/privacy}">Политика конфиденциальности</a></li>
     </ul>
 </footer>
+
 </body>
 </html>

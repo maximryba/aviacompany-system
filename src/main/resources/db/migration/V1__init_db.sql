@@ -141,3 +141,5 @@ create table if not exists goods(
 
 
 insert into users (username, password, email, phone, role) VALUES ('manager', '$2a$10$fN6qHCHMsC66OjY87cKrWO/GMmsJX4vGikesyt7qWEL8Kq5l8q6HO', 'komarovmaxim90@gmail.com', '375293977145', 'ROLE_MANAGER');
+
+insert into seat_types (type, cost_coeff) VALUES ('BUSINESS', 1.5), ('SIMPLE', 1.0);

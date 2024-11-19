@@ -23,11 +23,11 @@
                     <img th:src="@{/images/user.png}" alt="Профиль" width="40" height="40"/>
                 </a>
                 <div id="profileMenu" class="profile-menu">
-                    <span th:if="${currentUser  != null}" th:text="${currentUser .username}">Имя пользователя</span> <!-- Имя текущего пользователя -->
-                    <a th:if="${currentUser  != null}" th:href="@{/profile}">Посмотреть профиль</a>
-                    <a th:if="${currentUser  != null}" th:href="@{/orders}">Мои заказы</a>
-                    <a th:if="${currentUser  == null}" th:href="@{/auth/sign-in}">Войти</a> <!-- Ссылка на логин, если пользователь не вошел -->
-                    <a th:if="${currentUser  != null}" th:href="@{/logout}">Выйти</a> <!-- Ссылка на выход, если пользователь вошел -->
+                    <span th:if="${currentUser != null}" th:text="${currentUser .username}">Имя пользователя</span> <!-- Имя текущего пользователя -->
+                    <a th:if="${currentUser != null}" th:href="@{/profile}">Посмотреть профиль</a>
+                    <a th:if="${currentUser != null}" th:href="@{/orders}">Мои заказы</a>
+                    <a th:if="${currentUser == null}" th:href="@{/auth/sign-in}">Войти</a> <!-- Ссылка на логин, если пользователь не вошел -->
+                    <a th:if="${currentUser != null}" th:href="@{/logout}">Выйти</a> <!-- Ссылка на выход, если пользователь вошел -->
                 </div>
             </div>
             <a th:href="@{/cart}">
@@ -49,7 +49,7 @@
                 <p>Время прибытия: <span th:text="${flight.arrivalTime}">00:00</span></p>
                 <p>Время в пути: <span th:text="${flight.flightDuration}">00:00</span></p>
                 <p>Цена: <span th:text="${flight.cost}">0</span> руб.</p>
-                <a class="btn" th:href="@{/booking/{flightId}(flightId=${flight.id})}">Заказать</a>
+                <a class="btn" th:href="@{/booking/{flightId}(flightId=${flight.getId()})/{userId}(userId=${userId})}">Заказать</a>
             </div>
         </div>
         <div th:if="${flights.size() == 0}">

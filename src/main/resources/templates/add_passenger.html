@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/schema/security" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/add_passenger.css}">
+    <script th:src="@{/js/booking.js}"></script>
+    <title>Заказ билета</title>
+</head>
+<body>
+<!-- Хедер -->
+<header>
+    <nav>
+        <ul>
+            <li><a th:href="@{/}">Главная</a></li>
+            <li><a th:href="@{/flights/list}">Рейсы</a></li>
+            <li><a th:href="@{/contact}">Связаться с нами</a></li>
+            <li><a th:href="@{/about}">О нас</a></li>
+            <li sec:authorize="hasRole('MANAGER')">
+                <a th:href="@{/manager}">Страница менеджера</a>
+            </li>
+        </ul>
+        <div class="icons">
+            <div class="profile-container" onclick="toggleProfileMenu()">
+                <a th:href="@{/profile}">
+                    <img th:src="@{/images/user.png}" alt="Профиль" width="40" height="40"/>
+                </a>
+                <div id="profileMenu" class="profile-menu">
+                    <span th:if="${currentUser != null}" th:text="${currentUser .username}">Имя пользователя</span>
+                    <a th:if="${currentUser != null}" th:href="@{/profile}">Посмотреть профиль</a>
+                    <a th:if="${currentUser != null}" th:href="@{/orders}">Мои заказы</a>
+                    <a th:if="${currentUser == null}" th:href="@{/auth/sign-in}">Войти</a>
+                    <a th:if="${currentUser != null}" th:href="@{/logout}">Выйти</a>
+                </div>
+            </div>
+            <a th:href="@{/cart}">
+                <img th:src="@{/images/basket.png}" alt="Корзина" width="40" height="40"/>
+            </a>
+        </div>
+    </nav>
+</header>
+
+<!-- Основное содержание -->
+<main>
+    <h2>Добавить пассажира</h2>
+    <form th:action="@{/passenger/add/{username}/{flightId}(username=${currentUser.username}, flightId=${flightId})}" method="post" novalidate>
+        <label for="firstName">Имя:</label>
+        <input type="text" id="firstName" name="firstName" required placeholder="Введите имя" />
+
+        <label for="lastName">Фамилия:</label>
+        <input type="text" id="lastName" name="lastName" required placeholder="Введите фамилию" />
+
+        <label for="phone">Номер телефона:</label>
+        <input type="tel" id="phone" name="phone" required placeholder="Введите номер телефона" pattern="[0-9]{12}" />
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required placeholder="Введите email" />
+
+        <label for="passport">Номер и серия паспорта:</label>
+        <input type="text" id="passport" name="passport" required placeholder="Введите номер и серию паспорта" />
+
+        <button type="submit">Создать</button>
+    </form>
+</main>
+
+<!-- Футер -->
+<footer>
+    <p>&copy; 2024 Авиакомпания. Все права защищены.</p>
+    <ul>
+        <li><a th:href="@{/terms}">Условия использования</a></li>
+        <li><a th:href="@{/privacy}">Политика конфиденциальности</a></li>
+    </ul>
+</footer>
+</body>
+</html>

@@ -1,3 +1,30 @@
+form {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+form input {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+form button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+form button:hover {
+    background-color: #45a049;
+}
+
 /* Общие стили */
 html, body {
     height: 100%;
@@ -315,38 +342,4 @@ a {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-}
-
-.seat-selection {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 20px 0;
-}
-.seat-row {
-    display: flex;
-    justify-content: center;
-    margin: 5px 0;
-}
-.seat {
-    width: 40px;
-    height: 40px;
-    margin: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-weight: bold;
-}
-.seat.available {
-    background-color: #b2ffb2; /* Зеленый для доступных мест */
-}
-.seat.selected {
-    background-color: #ffcc00; /* Желтый для выбранных мест */
-}
-.seat.occupied {
-    background-color: #ff6666; /* Красный для занятых мест */
-    cursor: not-allowed;
 }

@@ -84,6 +84,14 @@
                 <button type="submit" class="btn add">Добавить</button>
             </form>
         </div>
+        <form method="post" th:action="@{/manager/airplanes/add-seats}">
+            <select name="airplaneId" required>
+                <option th:each="airplane : ${planes}"
+                        th:value="${airplane.id}"
+                        th:text="${airplane.name}"></option>
+            </select>
+            <button type="submit" class="btn add">Добавить места на самолёт</button>
+        </form>
     </section>
 </main>
 

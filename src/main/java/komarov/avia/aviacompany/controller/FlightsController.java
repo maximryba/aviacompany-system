@@ -54,6 +54,7 @@ public class FlightsController {
         List<Flight> flights = this.flightsService.findAllBySearch(flightSearch);
         Map<Integer, Airport> airportMap = this.airportsService.getAllAirports().stream()
                 .collect(Collectors.toMap(Airport::getId, Function.identity()));
+        model.addAttribute("userId", this.userService.getCurrentUser().getId());
         model.addAttribute("currentUser", userDetails);
         model.addAttribute("flights", flights);
         model.addAttribute("airportMap", airportMap);
@@ -61,9 +62,9 @@ public class FlightsController {
         return "search"; 
     }
 
-    @GetMapping("/booking/{flightId}")
-    public String bookFlight(@PathVariable int flightId, Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        int userId = this.userService.getCurrentUser().getId();
+    @GetMapping("/booking/{flightId}/{userId}")
+    public String bookFlight(@PathVariable int flightId, Model model, @AuthenticationPrincipal UserDetails userDetails,
+                             @PathVariable int userId) {
         List<Passenger> passengers = this.passengerService.findByUserId(userId);
         Optional<Flight> flight = this.flightsService.findById(flightId);
 
