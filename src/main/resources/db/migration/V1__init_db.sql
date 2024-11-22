@@ -66,6 +66,15 @@ create table if not exists seat_types(
                                          cost_coeff decimal(8, 2) not null
 );
 
+create table if not exists seats_flights (
+    id serial primary key,
+    seat_id int not null,
+    flight_archive_id int not null,
+    state varchar(30) not null,
+    CONSTRAINT fk_flight_archive FOREIGN KEY (flight_archive_id) REFERENCES flights_archive(id) ON DELETE CASCADE,
+    CONSTRAINT fk_seat FOREIGN KEY (seat_id) REFERENCES seats(id) ON DELETE CASCADE
+);
+
 create table if not exists seats (
                                      id serial primary key,
                                      airplane_id int not null,
@@ -74,13 +83,12 @@ create table if not exists seats (
                                      CONSTRAINT fk_airplane FOREIGN KEY (airplane_id) REFERENCES airplanes(id) on delete cascade,
                                      CONSTRAINT fk_type FOREIGN KEY (type) REFERENCES seat_types(id) on delete cascade
 );
-
 CREATE TABLE IF NOT EXISTS passengers (
                                           id serial PRIMARY KEY,
                                           first_name varchar(30) NOT NULL,
                                           last_name varchar(30) NOT NULL,
                                           user_id int NOT NULL,
-                                          email varchar(50) NOT NULL UNIQUE,
+                                          email varchar(50) NOT NULL,
                                           passport varchar(20) NOT NULL,
                                           phone varchar(15) NOT NULL UNIQUE,
                                           CHECK (passport ~ '^[A-Za-z]{2}[0-9]*$'),
@@ -139,7 +147,15 @@ create table if not exists goods(
                                     CONSTRAINT fk_flight FOREIGN KEY (flight_id) REFERENCES flights(id) on delete cascade
 );
 
+create table if not exists flights_archive (
+    id serial primary key,
+    flight_id int not null,
+    date date not null,
+    constraint fk_flight foreign key (flight_id) references flights(id) on delete cascade
+);
+
 
 insert into users (username, password, email, phone, role) VALUES ('manager', '$2a$10$fN6qHCHMsC66OjY87cKrWO/GMmsJX4vGikesyt7qWEL8Kq5l8q6HO', 'komarovmaxim90@gmail.com', '375293977145', 'ROLE_MANAGER');
 
 insert into seat_types (type, cost_coeff) VALUES ('BUSINESS', 1.5), ('SIMPLE', 1.0);
+

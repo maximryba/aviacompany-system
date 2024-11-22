@@ -22,18 +22,24 @@ public class PassengerController {
 
     private final UserService userService;
 
-    @PostMapping("/passenger/add/{username}/{flightId}")
-    public String addPassenger(@PathVariable("username") String username, @ModelAttribute Passenger passenger,
-                               @PathVariable int flightId) {
-        passenger.setUserId(this.userService.getByUsername(username).getId());
-        this.passengerService.save(passenger);
-        return "redirect:/booking/" + flightId;
+    @PostMapping("/passenger/add/{flightId}")
+    public String addPassenger(@ModelAttribute Passenger passenger,
+                               @PathVariable int flightId, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            passenger.setUserId(this.userService.getByUsername(userDetails.getUsername()).getId());
+            this.passengerService.save(passenger);
+            return "redirect:/booking/" + flightId + "/" + this.userService.getByUsername(userDetails.getUsername()).getId();
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Пассажир с таким номером телефона уже зарегистрирован.");
+            return "add_passenger";
+        }
     }
 
-    @GetMapping("/passenger/add/{username}/{flightId}")
-    public String addPassenger(@PathVariable("username") String username, @PathVariable int flightId, Model model,
+    @GetMapping("/passenger/add/{flightId}")
+    public String addPassenger(@PathVariable int flightId, Model model,
                                @AuthenticationPrincipal UserDetails userDetails) {
         model.addAttribute("currentUser", userDetails);
+        model.addAttribute("flightId", flightId);
         return "add_passenger";
     }
 

@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" th:href="@{/css/add_passenger.css}">
-    <script th:src="@{/js/booking.js}"></script>
-    <title>Заказ билета</title>
+    <script th:src="@{/js/add_passenger.js}"></script>
+    <title>Добавление пассажира</title>
 </head>
 <body>
 <!-- Хедер -->
@@ -27,11 +27,11 @@
                     <img th:src="@{/images/user.png}" alt="Профиль" width="40" height="40"/>
                 </a>
                 <div id="profileMenu" class="profile-menu">
-                    <span th:if="${currentUser != null}" th:text="${currentUser .username}">Имя пользователя</span>
-                    <a th:if="${currentUser != null}" th:href="@{/profile}">Посмотреть профиль</a>
-                    <a th:if="${currentUser != null}" th:href="@{/orders}">Мои заказы</a>
-                    <a th:if="${currentUser == null}" th:href="@{/auth/sign-in}">Войти</a>
-                    <a th:if="${currentUser != null}" th:href="@{/logout}">Выйти</a>
+                    <span th:if="${currentUser  != null}" th:text="${currentUser .username}">Имя пользователя</span>
+                    <a th:if="${currentUser  != null}" th:href="@{/profile}">Посмотреть профиль</a>
+                    <a th:if="${currentUser  != null}" th:href="@{/orders}">Мои заказы</a>
+                    <a th:if="${currentUser  == null}" th:href="@{/auth/sign-in}">Войти</a>
+                    <a th:if="${currentUser  != null}" th:href="@{/logout}">Выйти</a>
                 </div>
             </div>
             <a th:href="@{/cart}">
@@ -43,25 +43,41 @@
 
 <!-- Основное содержание -->
 <main>
-    <h2>Добавить пассажира</h2>
-    <form th:action="@{/passenger/add/{username}/{flightId}(username=${currentUser.username}, flightId=${flightId})}" method="post" novalidate>
-        <label for="firstName">Имя:</label>
-        <input type="text" id="firstName" name="firstName" required placeholder="Введите имя" />
+    <section class="form-container">
+        <h1>Добавить пассажира</h1>
+        <form th:action="@{/passenger/add/{flightId}(flightId=${flightId})}" method="POST">
+            <div class="form-group">
+                <label for="firstName">Имя</label>
+                <input type="text" id="firstName" name="firstName" class="form-control" required pattern="[A-ZА-Я][a-zа-я]*" 
+                       title="Имя должно начинаться с заглавной буквы и содержать только буквы."/>
+            </div>
 
-        <label for="lastName">Фамилия:</label>
-        <input type="text" id="lastName" name="lastName" required placeholder="Введите фамилию" />
+            <div class="form-group">
+                <label for="lastName">Фамилия</label>
+                <input type="text" id="lastName" name="lastName" class="form-control" required pattern="[A-ZА-Я][a-zа-я]*" 
+                       title="Фамилия должна начинаться с заглавной буквы и содержать только буквы."/>
+            </div>
 
-        <label for="phone">Номер телефона:</label>
-        <input type="tel" id="phone" name="phone" required placeholder="Введите номер телефона" pattern="[0-9]{12}" />
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" class="form-control" required title="Введите корректный email."/>
+            </div>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required placeholder="Введите email" />
+            <div class="form-group">
+                <label for="phone">Номер телефона</label>
+                <input type="tel" id="phone" name="phone" class="form-control" required pattern="\d{12}" 
+                       title="Номер телефона должен содержать только 12 цифр."/>
+            </div>
 
-        <label for="passport">Номер и серия паспорта:</label>
-        <input type="text" id="passport" name="passport" required placeholder="Введите номер и серию паспорта" />
+            <div class="form-group">
+                <label for="passportNumber">Номер паспорта</label>
+                <input type="text" id="passportNumber" name="passport" class="form-control" required pattern="\w{2}\d{7}" 
+                       title="Номер паспорта должен состоять из 2 букв и 7 цифр."/>
+            </div>
 
-        <button type="submit">Создать</button>
-    </form>
+            <button type="submit" class="btn">Добавить пассажира</button>
+        </form>
+    </section>
 </main>
 
 <!-- Футер -->
@@ -72,5 +88,6 @@
         <li><a th:href="@{/privacy}">Политика конфиденциальности</a></li>
     </ul>
 </footer>
+
 </body>
 </html>

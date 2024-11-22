@@ -49,7 +49,7 @@
                 <p>Время прибытия: <span th:text="${flight.arrivalTime}">00:00</span></p>
                 <p>Время в пути: <span th:text="${flight.flightDuration}">00:00</span></p>
                 <p>Цена: <span th:text="${flight.cost}">0</span> руб.</p>
-                <a class="btn" th:href="@{/booking/{flightId}(flightId=${flight.getId()})/{userId}(userId=${userId})}">Заказать</a>
+                <a class="btn" th:href="@{/booking/{flightId}/{userId}(userId=${userId}, flightId=${flight.id})}">Заказать</a>
             </div>
         </div>
         <div th:if="${flights.size() == 0}">

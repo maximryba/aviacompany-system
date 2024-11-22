@@ -1,6 +1,7 @@
 package komarov.avia.aviacompany.controller;
 
 import komarov.avia.aviacompany.entity.Passenger;
+import komarov.avia.aviacompany.entity.Seat;
 import komarov.avia.aviacompany.service.PassengerService;
 import komarov.avia.aviacompany.service.UserService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -10,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import komarov.avia.aviacompany.entity.Airport;
 import komarov.avia.aviacompany.entity.Flight;
@@ -64,13 +66,30 @@ public class FlightsController {
 
     @GetMapping("/booking/{flightId}/{userId}")
     public String bookFlight(@PathVariable int flightId, Model model, @AuthenticationPrincipal UserDetails userDetails,
-                             @PathVariable int userId) {
-        List<Passenger> passengers = this.passengerService.findByUserId(userId);
+    @PathVariable int userId) {
+        List<Passenger> passengers = this.passengerService.findByUserId(this.userService.getByUsername(userDetails.getUsername()).getId());
         Optional<Flight> flight = this.flightsService.findById(flightId);
 
         model.addAttribute("passengers", passengers);
         model.addAttribute("currentUser", userDetails);
         model.addAttribute("flight", flight.orElse(null));
         return "booking";
+    }
+
+    @GetMapping("/booking/{flightId}/{userId}")
+    public String getBookingPage(@PathVariable Long flightId, Model model) {
+        Flight flight = flightService.getFlightById(flightId);
+        List<Seat> seats = seatService.getAvailableSeats(flightId);
+        model.addAttribute("flight", flight);
+        model.addAttribute("seats", seats);
+        model.addAttribute("seatSelection", new SeatSelection());
+        return "booking";
+
+    @PostMapping("/booking/confirm")
+    public String confirmBooking(@ModelAttribute SeatSelection seatSelection, Model model) {
+        // Логика для обработки выбранных мест
+        boolean isSuccess = seatService.bookSeats(seatSelection);
+        model.addAttribute("isSuccess", isSuccess);
+        return "confirmation";
     }
 }
